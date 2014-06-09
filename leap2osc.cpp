@@ -67,8 +67,7 @@ void OSCFeeder::onFrame(const Controller& controller) {
         const Vector direction = hand.direction();
         const Vector position = hand.palmPosition();
 
-        p << osc::BeginMessage("/hand")
-          << handType.c_str()
+        p << osc::BeginMessage((std::string("/hand/") + handType).c_str())
           << hand.id()
           << position.x << position.y << position.z
           << direction.pitch() << normal.roll() << direction.yaw()
@@ -78,7 +77,7 @@ void OSCFeeder::onFrame(const Controller& controller) {
         const FingerList fingers = hand.fingers();
         for (FingerList::const_iterator fl = fingers.begin(); fl != fingers.end(); ++fl) {
             const Finger finger = *fl;
-            p << osc::BeginMessage("/finger") << handType.c_str() << hand.id()
+            p << osc::BeginMessage((std::string("/finger/") + handType).c_str()) << hand.id()
               << fingerNames[finger.type()].c_str() << finger.id() << finger.length() << finger.width()
               << osc::EndMessage;
             // Get finger bones
@@ -90,7 +89,7 @@ void OSCFeeder::onFrame(const Controller& controller) {
                 const Vector next = bone.nextJoint();
                 const Vector direction = bone.direction();
 
-                p << osc::BeginMessage("/bone") << handType.c_str() << hand.id()
+                p << osc::BeginMessage((std::string("/bone/") + handType).c_str()) << hand.id()
                   << fingerNames[finger.type()].c_str() << finger.id()
                   << boneNames[boneType].c_str()
                   << prev.x << prev.y << prev.z
